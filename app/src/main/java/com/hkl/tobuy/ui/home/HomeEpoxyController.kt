@@ -8,7 +8,7 @@ import com.hkl.tobuy.dataabase.entity.ItemEntity
 import com.hkl.tobuy.databinding.ModelItemEntityBinding
 import com.hkl.tobuy.ui.epoxy.ViewBindingKotlinModel
 
-class HomeEpoxyController : EpoxyController() {
+class HomeEpoxyController(itemEntityInterface: ItemEntityInterface) : EpoxyController() {
 
     var isLoading  = true
         set(value) {
