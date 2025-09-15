@@ -33,6 +33,7 @@ androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation
 epoxy = { group = "com.airbnb.android", name = "epoxy", version.ref = "epoxy" }
 epoxy-processor = { group = "com.airbnb.android", name = "epoxy-processor", version.ref = "epoxy" }
 epoxy-databinding = { group = "com.airbnb.android", name = "epoxy-databinding", version.ref = "epoxy" }
+epoxy-annotations = { group = "com.airbnb.android", name = "epoxy-annotations", version.ref = "epoxy" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

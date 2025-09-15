@@ -5,13 +5,13 @@ import com.hkl.tobuy.dataabase.entity.ItemEntity
 
 class ToBuyRepo(private val appDataBase: AppDataBase) {
 
-    fun addItem(item : ItemEntity) {
+    suspend fun addItem(item : ItemEntity) {
         appDataBase.ItemEntityDao().insert(item)
     }
-    fun deleteItem(item: ItemEntity) {
+    suspend fun deleteItem(item: ItemEntity) {
         appDataBase.ItemEntityDao().delete(item)
     }
-    fun getAllItem() : List<ItemEntity>{
+    suspend fun getAllItem() : List<ItemEntity>{
         return  appDataBase.ItemEntityDao().getAllItemEntities()
     }
 }

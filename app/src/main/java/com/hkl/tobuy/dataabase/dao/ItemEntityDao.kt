@@ -8,11 +8,11 @@ import com.hkl.tobuy.dataabase.entity.ItemEntity
 @Dao
 interface ItemEntityDao {
     @Query("SELECT * FROM item_entity")
-    fun getAllItemEntities(): List<ItemEntity>
+    suspend fun getAllItemEntities(): List<ItemEntity>
 
     @Insert
-    fun insert(itemEntity: ItemEntity)
+    suspend fun insert(itemEntity: ItemEntity)
 
     @Delete
-    fun delete(itemEntity: ItemEntity)
+    suspend fun delete(itemEntity: ItemEntity)
 }

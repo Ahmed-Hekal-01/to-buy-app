@@ -2,8 +2,10 @@ package com.hkl.tobuy.arch
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.hkl.tobuy.dataabase.AppDataBase
 import com.hkl.tobuy.dataabase.entity.ItemEntity
+import kotlinx.coroutines.launch
 
 class ToBuyViewModel : ViewModel() {
     private lateinit var repo: ToBuyRepo
@@ -11,14 +13,22 @@ class ToBuyViewModel : ViewModel() {
 
     fun init(appDataBase: AppDataBase){
         repo = ToBuyRepo(appDataBase)
-        val items  = repo.getAllItem()
-        itemListLiveData.postValue(items)
+        viewModelScope.launch {
+            val items  = repo.getAllItem()
+            itemListLiveData.postValue(items)
+        }
+
     }
 
     fun addItem(item : ItemEntity){
-        repo.addItem(item)
+        viewModelScope.launch {
+            repo.addItem(item)
+        }
     }
+
     fun deleteItem(item : ItemEntity) {
-        repo.deleteItem(item)
+        viewModelScope.launch {
+            repo.deleteItem(item)
+        }
     }
 }

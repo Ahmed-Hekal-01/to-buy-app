@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.epoxy)
     implementation(libs.epoxy.databinding)
+    implementation(libs.epoxy.annotations)
     ksp(libs.epoxy.processor)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
