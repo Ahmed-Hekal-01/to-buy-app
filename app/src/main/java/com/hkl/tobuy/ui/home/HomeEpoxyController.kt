@@ -8,8 +8,10 @@ import com.airbnb.epoxy.EpoxyController
 import com.hkl.tobuy.R
 import com.hkl.tobuy.dataabase.entity.ItemEntity
 import com.hkl.tobuy.databinding.ModelEmptyStateBinding
+import com.hkl.tobuy.databinding.ModelHeaderItemBinding
 import com.hkl.tobuy.databinding.ModelItemEntityBinding
 import com.hkl.tobuy.ui.epoxy.ViewBindingKotlinModel
+import kotlinx.coroutines.delay
 
 class HomeEpoxyController(private val itemEntityInterface: ItemEntityInterface) : EpoxyController() {
 
@@ -35,9 +37,23 @@ class HomeEpoxyController(private val itemEntityInterface: ItemEntityInterface) 
             EmptyStateEpoxyModel().id("empty_state").addTo(this)
             return
         }
-
-        itemEntityList.forEach { itemEntity ->
-            ItemEntityModel(itemEntity, itemEntityInterface).id(itemEntity.id).addTo(this)
+        var currentPriority = -1
+        itemEntityList.sortedByDescending {
+            it.priority
+        }.forEach { item ->
+            if(item.priority != currentPriority) {
+                currentPriority = item.priority
+                val text = getHeaderTextForPriority(currentPriority)
+                HeaderEpoxyModel(text).id(text).addTo(this)
+            }
+            ItemEntityModel(item, itemEntityInterface).id(item.id).addTo(this)
+        }
+    }
+    private fun getHeaderTextForPriority(currentPriority: Int) : String{
+        return when(currentPriority) {
+            1 -> "Low Priority"
+            2 -> "Medium Priority"
+            else -> "High Priority"
         }
     }
     data class ItemEntityModel (
@@ -70,7 +86,13 @@ class HomeEpoxyController(private val itemEntityInterface: ItemEntityInterface) 
         override fun ModelEmptyStateBinding.bind() {
            // no thing to do
         }
-
+    }
+    data class HeaderEpoxyModel(
+        val headerText : String
+    ) : ViewBindingKotlinModel<ModelHeaderItemBinding>(R.layout.model_header_item){
+        override fun ModelHeaderItemBinding.bind() {
+           textView.text = headerText
+        }
 
     }
 }

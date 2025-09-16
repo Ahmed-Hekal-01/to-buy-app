@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.room.util.copy
 import com.airbnb.epoxy.EpoxyTouchHelper
 import com.hkl.tobuy.R
 import com.hkl.tobuy.dataabase.entity.ItemEntity
