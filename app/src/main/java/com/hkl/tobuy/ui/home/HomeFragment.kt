@@ -74,6 +74,7 @@ class HomeFragment : BaseFragment() , ItemEntityInterface {
     }
 
     override fun onItemSelected(itemEntity: ItemEntity) {
-        //todo
+        val navDirections = HomeFragmentDirections.actionHomeFragmentToAddItemEntityFragment(itemEntity.id)
+        navController.navigate(navDirections)
     }
 }

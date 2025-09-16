@@ -1,6 +1,7 @@
 package com.hkl.tobuy.ui.home
 
 import LoadingEpoxyModel
+import android.content.res.ColorStateList
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -11,7 +12,6 @@ import com.hkl.tobuy.databinding.ModelEmptyStateBinding
 import com.hkl.tobuy.databinding.ModelHeaderItemBinding
 import com.hkl.tobuy.databinding.ModelItemEntityBinding
 import com.hkl.tobuy.ui.epoxy.ViewBindingKotlinModel
-import kotlinx.coroutines.delay
 
 class HomeEpoxyController(private val itemEntityInterface: ItemEntityInterface) : EpoxyController() {
 
@@ -51,9 +51,9 @@ class HomeEpoxyController(private val itemEntityInterface: ItemEntityInterface) 
     }
     private fun getHeaderTextForPriority(currentPriority: Int) : String{
         return when(currentPriority) {
-            1 -> "Low Priority"
-            2 -> "Medium Priority"
-            else -> "High Priority"
+            1 -> "Low"
+            2 -> "Medium"
+            else -> "High"
         }
     }
     data class ItemEntityModel (
@@ -78,7 +78,13 @@ class HomeEpoxyController(private val itemEntityInterface: ItemEntityInterface) 
                 3 -> android.R.color.holo_red_dark
                 else -> android.R.color.holo_purple
             }
-            priorityTextView.setBackgroundColor(ContextCompat.getColor(root.context,priorityColor))
+            val color = ContextCompat.getColor(root.context,priorityColor)
+            priorityTextView.setBackgroundColor(color)
+            root.setStrokeColor(ColorStateList.valueOf(color))
+
+            root.setOnClickListener {
+                itemEntityInterface.onItemSelected(itemEntity)
+            }
         }
 
     }
