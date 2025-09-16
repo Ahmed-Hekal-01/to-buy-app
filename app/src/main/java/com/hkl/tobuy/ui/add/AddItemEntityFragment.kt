@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.hkl.tobuy.R
 import com.hkl.tobuy.dataabase.entity.ItemEntity
 import com.hkl.tobuy.databinding.FragmentHomeBinding
@@ -12,7 +13,7 @@ import com.hkl.tobuy.ui.BaseFragment
 import java.util.UUID
 
 class AddItemEntityFragment : BaseFragment() {
-    private var _binding : FragmetnAddItemEntityBinding? = null
+    private var _binding: FragmetnAddItemEntityBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -20,7 +21,7 @@ class AddItemEntityFragment : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmetnAddItemEntityBinding.inflate(inflater,container,false)
+        _binding = FragmetnAddItemEntityBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -29,17 +30,31 @@ class AddItemEntityFragment : BaseFragment() {
         binding.saveButton.setOnClickListener {
             saveItemEntityToTheDataBase()
         }
+        sharedViewModel.transactionLiveData.observe(viewLifecycleOwner) { complete ->
+            if (complete) {
+                Toast.makeText(requireActivity(), "Item Saved", Toast.LENGTH_SHORT).show()
+
+                binding.titleEditText.text = null
+                binding.titleEditText.requestFocus()
+                binding.titleEditText.showKeyboard()
+                binding.descriptionEditText.text = null
+                binding.radioGroup.check(R.id.radioButtonLow)
+            }
+        }
+        binding.titleTextField.showKeyboard()
+        binding.titleEditText.requestFocus()
     }
+
     private fun saveItemEntityToTheDataBase() {
         val itemTitle = binding.titleEditText.text.toString().trim()
-        if(itemTitle.isEmpty()) {
+        if (itemTitle.isEmpty()) {
             binding.titleTextField.error = "* Required field"
             return
         }
         binding.titleTextField.error = null
 
         val itemDescription = binding.descriptionEditText.text.toString().trim()
-        val itemPriority = when(binding.radioGroup.checkedRadioButtonId ) {
+        val itemPriority = when (binding.radioGroup.checkedRadioButtonId) {
             R.id.radioButtonLow -> 1
             R.id.radioButtonMedium -> 2
             R.id.radioButtonHigh -> 3
@@ -55,6 +70,12 @@ class AddItemEntityFragment : BaseFragment() {
         )
         sharedViewModel.addItem(itemEntity)
     }
+
+    override fun onPause() {
+        super.onPause()
+        sharedViewModel.transactionLiveData.postValue(false)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

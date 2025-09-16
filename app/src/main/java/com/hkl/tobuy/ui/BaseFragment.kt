@@ -1,5 +1,6 @@
 package com.hkl.tobuy.ui
 
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
@@ -15,6 +16,12 @@ abstract class BaseFragment : Fragment() {
         get() = (activity as MainActivity).navController
     protected val appDataBase: AppDataBase
         get() = (AppDataBase.getDataBase(requireActivity()))
+    protected fun View.showKeyboard() {
+        mainActivity.showKeyboard(this)
+    }
 
+    protected fun View.hideKeyboard() {
+        mainActivity.hideKeyboard(this)
+    }
     protected val sharedViewModel: ToBuyViewModel by activityViewModels()
 }

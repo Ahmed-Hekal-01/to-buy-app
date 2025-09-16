@@ -4,7 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
+import androidx.room.util.copy
+import com.airbnb.epoxy.EpoxyTouchHelper
 import com.hkl.tobuy.R
 import com.hkl.tobuy.dataabase.entity.ItemEntity
 import com.hkl.tobuy.databinding.FragmentHomeBinding
@@ -35,15 +36,42 @@ class HomeFragment : BaseFragment() , ItemEntityInterface {
         sharedViewModel.itemListLiveData.observe(viewLifecycleOwner){ itemEntities ->
             controller.itemEntityList = itemEntities as ArrayList<ItemEntity>
         }
+        // setup swipe-to-delete
+        EpoxyTouchHelper.initSwiping(binding.homeRecyclerView)
+            .right()
+            .withTarget(HomeEpoxyController.ItemEntityModel::class.java)
+            .andCallbacks(object : EpoxyTouchHelper.SwipeCallbacks<HomeEpoxyController.ItemEntityModel>(){
+                override fun onSwipeCompleted(
+                    model: HomeEpoxyController.ItemEntityModel?,
+                    itemView: View?,
+                    position: Int,
+                    direction: Int
+                ) {
+                    val itemThatWRemoved = model?.itemEntity ?: return
+                    sharedViewModel.deleteItem(itemThatWRemoved)
+                }
+
+            })
     }
 
+    override fun onResume() {
+        super.onResume()
+        mainActivity.hideKeyboard(requireView())
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
     override fun onBumpPriority(itemEntity: ItemEntity) {
-        // todo
+        val currentPriority = itemEntity.priority
+        var newPriority = currentPriority + 1
+        if(newPriority > 3) {
+            newPriority = 1
+        }
+
+        val updatedItemEntity = itemEntity.copy(priority = newPriority)
+        sharedViewModel.updateItem(updatedItemEntity)
     }
 
     override fun onItemSelected(itemEntity: ItemEntity) {

@@ -2,6 +2,7 @@ package com.hkl.tobuy.arch
 
 import com.hkl.tobuy.dataabase.AppDataBase
 import com.hkl.tobuy.dataabase.entity.ItemEntity
+import kotlinx.coroutines.flow.Flow
 
 class ToBuyRepo(private val appDataBase: AppDataBase) {
 
@@ -11,7 +12,11 @@ class ToBuyRepo(private val appDataBase: AppDataBase) {
     suspend fun deleteItem(item: ItemEntity) {
         appDataBase.ItemEntityDao().delete(item)
     }
-    suspend fun getAllItem() : List<ItemEntity>{
+    fun getAllItem() : Flow<List<ItemEntity>> {
         return  appDataBase.ItemEntityDao().getAllItemEntities()
+    }
+
+    suspend fun updateItem(item: ItemEntity) {
+        appDataBase.ItemEntityDao().update(item)
     }
 }
