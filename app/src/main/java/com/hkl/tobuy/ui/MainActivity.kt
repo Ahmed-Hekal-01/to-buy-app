@@ -49,9 +49,10 @@ class MainActivity : AppCompatActivity() {
                 bottomNavigationView.isGone = true
             }
         }
-        val viewModel : ToBuyViewModel by viewModels ()
+        val viewModel: ToBuyViewModel by viewModels()
         viewModel.init(AppDataBase.getDataBase(this))
     }
+
     fun showKeyboard(view: View) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             view.windowInsetsController?.show(WindowInsets.Type.ime())

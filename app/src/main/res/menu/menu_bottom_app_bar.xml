@@ -14,5 +14,5 @@
         android:enabled="true"
         android:icon="@drawable/ic_customization_24"
         android:title="Customization"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 </menu>
